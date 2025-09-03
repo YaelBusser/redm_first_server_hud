@@ -14,7 +14,7 @@ const Hud = () => {
         const handleMessage = (event) => {
             const {action, data} = event.data;
 
-            // Gestion des événements updateHUD (mise à jour complète)
+            // SEULEMENT cet événement - mise à jour complète du HUD
             if (action === 'updateHUD') {
                 if (data.money !== undefined) setMoney(data.money);
                 if (data.health !== undefined) setHealth(data.health);
@@ -24,6 +24,7 @@ const Hud = () => {
                 if (data.experience !== undefined) setExperience(data.experience);
                 if (data.maxExperience !== undefined) setMaxExperience(data.maxExperience);
             }
+
         };
 
         // Un seul listener pour tous les événements
