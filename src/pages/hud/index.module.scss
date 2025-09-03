@@ -1,0 +1,200 @@
+@use "../../styles/variables" as vars;
+
+.container {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  height: 10rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-template-rows: repeat(1, 1fr);
+
+  .hud {
+    grid-column: 1;
+    grid-row: 1;
+    width: 20rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    font-family: Arial, sans-serif;
+    color: white;
+    background-color: vars.$backgroundColor;
+    padding: 1rem;
+    border-radius: 10px 10px 10px 10px;
+
+    .blockProfile {
+      display: flex;
+      gap: 1rem;
+
+      .imgProfile {
+        width: 50px;
+        height: 50px;
+        object-fit: cover;
+        border-radius: 50%;
+      }
+
+      .username {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 5px;
+        font-family: vars.$secondaryFont;
+      }
+
+      .money{
+      }
+    }
+  }
+
+  .exp {
+    width: 100%;
+    grid-column: 2;
+    grid-row: 1;
+    bottom: 1rem;
+    margin-left: auto;
+    display: flex;
+    align-items: end;
+    justify-content: center;
+    
+    .barContainer {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      max-width: 400px;
+    }
+    
+    .bar {
+      background: linear-gradient(135deg, vars.$expBarBackground, vars.$expBarBackgroundLight);
+      border-radius: 10px;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      overflow: hidden;
+      width: 100%;
+      
+      .fillExp {
+        background: linear-gradient(90deg, vars.$goldStart, vars.$primaryColor);
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 0 15px;
+        
+        // Le texte sera positionné de manière absolue par rapport à la barre totale
+        > * {
+          position: absolute;
+          left: 50%;
+          top: 50%;
+          transform: translate(-50%, -50%);
+          white-space: nowrap;
+          z-index: 1;
+        }
+        
+        .nbExp {
+          font-size: 24px;
+          font-weight: 600;
+          color: white;
+          text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+        
+        .lvl {
+          background: rgba(255, 255, 255, 0.2);
+          border-radius: 50%;
+          width: 20px;
+          height: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          
+          p {
+            font-size: 24px;
+            font-weight: bold;
+            color: white;
+            margin: 0;
+          }
+        }
+      }
+    }
+    
+    .expValueCircle {
+      position: absolute;
+      right: -15px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 40px;
+      height: 40px;
+      background: vars.$primaryColor;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      z-index: 3;
+      
+      span {
+        color: white;
+        font-size: 18px;
+        font-weight: bold;
+        text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+      }
+    }
+  }
+}
+
+// Styles des barres
+.bar {
+  width: 100%;
+  height: 25px;
+  background: vars.$barBackground;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+  
+  .barText {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+    font-weight: bold;
+    white-space: nowrap;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .healthIcon {
+    position: absolute;
+    right: .5rem;
+    top: 0;
+    bottom: 0;
+    font-size: 16px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+  }
+  
+  .fillHealth, .fillExp, .fillMoney {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-weight: bold;
+    transition: width 0.4s ease-in-out;
+    color: white;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+  }
+  
+  .fillHealth {
+    // Background géré dynamiquement dans le JSX selon le pourcentage de santé
+  }
+  
+  .fillMoney {
+    background-color: vars.$primaryColor;
+  }
+}
