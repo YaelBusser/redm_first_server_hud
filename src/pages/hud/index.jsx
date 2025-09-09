@@ -1,110 +1,101 @@
-import {useEffect, useState} from 'react';
-import styles from "./index.module.scss";
-import ExampleProfile from "/example_profile.jpg";
+    import {useEffect, useState} from 'react';
+    import styles from "./index.module.scss";
+    import LevelProgress from "../../components/LevelProgress";
+    import CircularProgress from "../../components/CircularProgress/index.jsx";
+    import Vie from "../../assets/icons/player/vie.svg?react";
+    import Endurance from "../../assets/icons/player/endurance.svg?react";
 
-const Hud = () => {
-    const [money, setMoney] = useState(100);
-    const [health, setHealth] = useState(1);
-    const [maxHealth, setMaxHealth] = useState(200);
-    const [username, setUsername] = useState("Arthur Morgan");
-    const [level, setLevel] = useState(5);
-    const [experience, setExperience] = useState(40);
-    const [maxExperience, setMaxExperience] = useState(100);
-    useEffect(() => {
-        const handleMessage = (event) => {
-            const {action, data} = event.data;
+    const Hud = () => {
+        // ✅ Valeurs par défaut corrigées
+        const [money, setMoney] = useState(0);
+        const [health, setHealth] = useState(500);
+        const [maxHealth, setMaxHealth] = useState(500);
+        const [endurance, setEndurance] = useState(50);
+        const [maxEndurance, setMaxEndurance] = useState(100);
+        const [username, setUsername] = useState("Inconnu");
+        const [level, setLevel] = useState(1);
+        const [experience, setExperience] = useState(0);
+        const [maxExperience, setMaxExperience] = useState(100);
 
-            // SEULEMENT cet événement - mise à jour complète du HUD
-            if (action === 'updateHUD') {
-                if (data.money !== undefined) setMoney(data.money);
-                if (data.health !== undefined) setHealth(data.health);
-                if (data.maxHealth !== undefined) setMaxHealth(data.maxHealth);
-                if (data.username !== undefined) setUsername(data.username);
-                if (data.level !== undefined) setLevel(data.level);
-                if (data.experience !== undefined) setExperience(data.experience);
-                if (data.maxExperience !== undefined) setMaxExperience(data.maxExperience);
-            }
+        useEffect(() => {
+            const handleMessage = (event) => {
+                const {action, data} = event.data;
 
-        };
+                // 🔍 DEBUG - Voir toutes les données reçues
+                console.log('�� HUD React - Action:', action, 'Data:', data);
 
-        // Un seul listener pour tous les événements
-        window.addEventListener('message', handleMessage);
+                if (action === 'updateHUD') {
+                    // 🔍 DEBUG - Voir les valeurs de stamina
+                    console.log('💪 Stamina - endurance:', data.endurance, 'maxEndurance:', data.maxEndurance);
 
-        return () => {
-            window.removeEventListener('message', handleMessage);
-        };
-    }, []);
+                    if (data.money !== undefined) setMoney(data.money);
+                    if (data.health !== undefined) setHealth(data.health);
+                    if (data.maxHealth !== undefined) setMaxHealth(data.maxHealth);
+                    if (data.endurance !== undefined) setEndurance(data.endurance);
+                    if (data.maxEndurance !== undefined) setMaxEndurance(data.maxEndurance);
+                    if (data.name !== undefined) setUsername(data.name);
+                    if (data.level !== undefined) setLevel(data.level);
+                    if (data.experience !== undefined) setExperience(data.experience);
+                    if (data.maxExperience !== undefined) setMaxExperience(data.maxExperience);
+                }
+            };
 
-    // ✅ calcul du pourcentage de vie par rapport au maxHealth
-    const healthPercent = Math.min(100, (health / maxHealth) * 100);
-    const expPercent = Math.min(100, (experience / maxExperience) * 100);
+            window.addEventListener('message', handleMessage);
 
-    // Fonction pour calculer les couleurs de la barre de vie selon le pourcentage
-    const getHealthColors = (percent) => {
-        if (percent >= 80) {
-            // Vert quand la santé est élevée (80-100%)
-            return { start: '#4caf50', end: '#2e7d32' };
-        } else if (percent >= 60) {
-            // Vert-jaune quand la santé est bonne (60-79%)
-            return { start: '#8bc34a', end: '#689f38' };
-        } else if (percent >= 40) {
-            // Jaune quand la santé est moyenne (40-59%)
-            return { start: '#ffeb3b', end: '#f57f17' };
-        } else if (percent >= 20) {
-            // Orange quand la santé est faible (20-39%)
-            return { start: '#ff9800', end: '#e65100' };
-        } else {
-            // Rouge quand la santé est critique (0-19%)
-            return { start: '#ff3b3b', end: '#b30000' };
-        }
+            return () => {
+                window.removeEventListener('message', handleMessage);
+            };
+        }, []);
+
+        // Calcul des pourcentages
+        const healthPercent = Math.min(100, (health / maxHealth) * 100);
+        const endurancePercent = Math.min(100, (endurance / maxEndurance) * 100);
+        const expPercent = Math.min(100, (experience / maxExperience) * 100);
+
+        return (<>
+            <div className={styles.container}>
+                <div className={styles.stats}>
+                    <div className={styles.statsGrid}>
+                        <div className={styles.statItem}>
+                            <CircularProgress
+                                percent={healthPercent}
+                                icon={<Vie/>}
+                                color="#ff3b3b"
+                                size={60}
+                            />
+                        </div>
+
+                        <div className={styles.statItem}>
+                            <CircularProgress
+                                percent={endurancePercent}
+                                icon={<Endurance/>}
+                                color="#4CAF50"
+                                size={60}
+                            />
+                            {endurance} -
+                            {maxEndurance}
+                        </div>
+                    </div>
+                </div>
+
+                <div className={styles.levelContainer}>
+                    <LevelProgress
+                        percent={expPercent}
+                        value={level}
+                        size={70}
+                    />
+                </div>
+
+                <div className={styles.moneyContainer}>
+                    <div className={styles.moneyValue}>
+                        ${Math.floor(money)}.
+                        <span className={styles.moneyCents}>
+                                {(Math.round((money % 1) * 100)).toString().padStart(2, '0')}
+                             </span>
+                    </div>
+                </div>
+            </div>
+        </>);
     };
 
-    const healthColors = getHealthColors(healthPercent);
-
-    return (
-        <div className={styles.container}>
-            <div className={styles.hud}>
-                <div className={styles.blockProfile}>
-                    <img className={styles.imgProfile} src={ExampleProfile} alt="profile"/>
-                    <div>
-                        <p className={styles.username}>{username}</p>
-                        <div className={styles.money}>
-                            <p>💵 {money} $</p>
-                        </div>
-                    </div>
-                </div>
-
-                <div className={styles.bar}>
-                    <div 
-                        className={styles.fillHealth} 
-                        style={{
-                            width: `${healthPercent}%`,
-                            height: `100%`,
-                            background: `linear-gradient(90deg, ${healthColors.start}, ${healthColors.end})`
-                        }}
-                    />
-                    <div className={styles.barText}>{health}/{maxHealth}</div>
-                    <div className={styles.healthIcon}>❤️</div>
-                </div>
-            </div>
-            <div className={styles.exp}>
-                <div className={styles.barContainer}>
-                    <div className={`${styles.bar}`}>
-                        <div 
-                            className={styles.fillExp} 
-                            style={{width: `${expPercent}%`}}
-                        />
-                        <div className={styles.barText}>
-                            <span className={styles.nbExp}>{experience} / {maxExperience} xp</span>
-                        </div>
-                    </div>
-                    <div className={styles.expValueCircle}>
-                        <span>{level}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    );
-};
-
-export default Hud;
+    export default Hud;

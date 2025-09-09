@@ -1,0 +1,54 @@
+@use "../../styles/variables" as vars;
+
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, vars.$backgroundColorPrimary, vars.$backgroundColorSecondary);
+  color: vars.$primaryColor;
+  text-align: center;
+  padding: 2rem;
+}
+
+.title {
+  font-family: vars.$secondaryFont;
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: vars.$secondaryColor;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+}
+
+.subtitle {
+  font-family: vars.$primaryFont;
+  font-size: 1.2rem;
+  margin-bottom: 3rem;
+  opacity: 0.8;
+}
+
+.navigation {
+  display: flex;
+  gap: 1rem;
+}
+
+.link {
+  display: inline-block;
+  padding: 1rem 2rem;
+  background-color: vars.$backgroundColorSecondary;
+  border: 2px solid vars.$secondaryColor;
+  border-radius: 8px;
+  color: vars.$secondaryColor;
+  text-decoration: none;
+  font-family: vars.$primaryFont;
+  font-weight: bold;
+  font-size: 1.1rem;
+
+  &:hover {
+    background-color: vars.$secondaryColor;
+    color: vars.$backgroundColorPrimary;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 215, 0, 0.3);
+  }
+}

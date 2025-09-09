@@ -1,0 +1,22 @@
+@use "../../styles/variables" as vars;
+
+.circularIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: vars.$backgroundColorPrimary;
+  border: 2px solid;
+  border-radius: 50%;
+
+  .iconContainer {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    
+    svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      fill: currentColor;
+    }
+  }
+}
